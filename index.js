@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.set("trust proxy", 1);
 
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = ["https://ethaum-dashboard-frontend.vercel.app"];
 const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps, curl, postman)
