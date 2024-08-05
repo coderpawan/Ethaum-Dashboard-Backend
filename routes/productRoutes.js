@@ -14,9 +14,11 @@ import {
   fetchTopProducts,
   fetchNewProducts,
   filterProducts,
+  updateApprovalDetails,
 } from "../controllers/productController.js";
 import {
   authenticate,
+  authorizeAdmin,
   authorizeSeller,
 } from "../middlewares/authMiddleware.js";
 import checkId from "../middlewares/checkId.js";
@@ -33,6 +35,7 @@ router
 
 router.get("/top", fetchTopProducts);
 router.get("/new", fetchNewProducts);
+router.route("/approval/:id").put(authenticate,authorizeAdmin,formidable(),updateApprovalDetails);
 
 router
   .route("/:id")

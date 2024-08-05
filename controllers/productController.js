@@ -3,23 +3,6 @@ import Product from "../models/productModel.js";
 
 const addProduct = asyncHandler(async (req, res) => {
   try {
-    const { name, description, price, category, quantity, brand } = req.fields;
-
-    // Validation
-    switch (true) {
-      case !name:
-        return res.json({ error: "Name is required" });
-      case !brand:
-        return res.json({ error: "Brand is required" });
-      case !description:
-        return res.json({ error: "Description is required" });
-      case !price:
-        return res.json({ error: "Price is required" });
-      case !category:
-        return res.json({ error: "Category is required" });
-      case !quantity:
-        return res.json({ error: "Quantity is required" });
-    }
 
     const product = new Product({ ...req.fields });
     await product.save();
@@ -32,23 +15,6 @@ const addProduct = asyncHandler(async (req, res) => {
 
 const updateProductDetails = asyncHandler(async (req, res) => {
   try {
-    const { name, description, price, category, quantity, brand } = req.fields;
-
-    // Validation
-    switch (true) {
-      case !name:
-        return res.json({ error: "Name is required" });
-      case !brand:
-        return res.json({ error: "Brand is required" });
-      case !description:
-        return res.json({ error: "Description is required" });
-      case !price:
-        return res.json({ error: "Price is required" });
-      case !category:
-        return res.json({ error: "Category is required" });
-      case !quantity:
-        return res.json({ error: "Quantity is required" });
-    }
 
     const product = await Product.findByIdAndUpdate(
       req.params.id,
@@ -56,6 +22,28 @@ const updateProductDetails = asyncHandler(async (req, res) => {
       { new: true }
     );
 
+    await product.save();
+
+    res.json(product);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json(error.message);
+  }
+});
+
+const updateApprovalDetails = asyncHandler(async (req, res) => {
+  try {
+    // Find the product by its ID
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // Update the adminApproval parameter
+    product.adminApproval = true;
+
+    // Save the updated product
     await product.save();
 
     res.json(product);
@@ -74,6 +62,7 @@ const removeProduct = asyncHandler(async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
 
 const fetchProducts = asyncHandler(async (req, res) => {
   try {
@@ -163,7 +152,7 @@ const addOrUpdateProductReview = asyncHandler(async (req, res) => {
     }
 
     // Recalculate the product rating and number of reviews
-    product.numReviews = product.reviews.length;
+    // product.numReviews = product.reviews.length;
     product.rating =
       product.reviews.reduce((acc, item) => item.rating + acc, 0) /
       product.reviews.length;
@@ -226,4 +215,5 @@ export {
   fetchTopProducts,
   fetchNewProducts,
   filterProducts,
+  updateApprovalDetails,
 };

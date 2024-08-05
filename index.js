@@ -3,6 +3,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors"; // Updated import
+import { v2 as cloudinary } from "cloudinary";
 
 // Utilities
 import connectDB from "./config/db.js";
@@ -45,6 +46,13 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 
 // Routes
 app.use("/api/users", userRoutes);

@@ -4,8 +4,7 @@ import Product from "../models/productModel.js";
 // Utility Function
 function calcPrices(orderItems) {
   const itemsPrice = orderItems.reduce(
-    (acc, item) => acc + item.price * item.qty,
-    0
+    (acc, item) => acc + item.realPrice, 0
   );
 
   const shippingPrice = itemsPrice > 100 ? 0 : 10;
@@ -27,6 +26,7 @@ function calcPrices(orderItems) {
 }
 
 const createOrder = async (req, res) => {
+ 
   try {
     const { orderItems, shippingAddress, paymentMethod } = req.body;
 
@@ -52,7 +52,6 @@ const createOrder = async (req, res) => {
       return {
         ...itemFromClient,
         product: itemFromClient._id,
-        price: matchingItemFromDB.price,
         _id: undefined,
       };
     });
@@ -70,7 +69,6 @@ const createOrder = async (req, res) => {
       shippingPrice,
       totalPrice,
     });
-
     const createdOrder = await order.save();
     res.status(201).json(createdOrder);
   } catch (error) {

@@ -21,7 +21,7 @@ import {
 router
   .route("/")
   .post(authenticate, createOrder)
-  .get(authenticate, authorizeAdmin, getAllOrders);
+  .get(authenticate, getAllOrders);
 
 router.route("/mine").get(authenticate, getUserOrders);
 router.route("/total-orders").get(countTotalOrders);

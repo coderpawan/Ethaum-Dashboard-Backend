@@ -17,17 +17,73 @@ const reviewSchema = mongoose.Schema(
 
 const productSchema = mongoose.Schema(
   {
-    name: { type: String, required: true },
-    image: { type: String, required: true },
-    brand: { type: String, required: true },
-    quantity: { type: Number, required: true },
-    category: { type: ObjectId, ref: "Category", required: true },
-    description: { type: String, required: true },
+    category: { type: ObjectId, ref: "Category", required: [true, "Category Selection is required"] },
+    vendor: {
+      type: String,
+      required: [true, "Vendor is required"],
+    },
+    seller_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    rating: {
+      type: Number,
+      required: [true, "Rating is required"],
+      default: 0
+    },
+    image: {
+      type: String,
+      required: [true, "Picture is required"],
+    },
+    tags: {
+      type: [String],
+      required: [true, "Tags are required"],
+    },
+    title: {
+      type: String,
+      required: [true, "Title is required"],
+    },
+    description: {
+      type: String,
+      required: [true, "Description is required"],
+    },
+    marketCost: {
+      type: Number,
+    },
+    discount: {
+      type: String,
+    },
+    realPrice: {
+      type: Number,
+      required: [true, "Real Price is required"],
+    },
+    costType: {
+      type: String,
+      required: [true, "Cost Type is required"],
+    },
+    startingPrice: {
+      type: Number,
+    },
+    website: {
+      type: String,
+      validate: {
+        validator: function (v) {
+          return /^(ftp|http|https):\/\/[^ "]+$/.test(v);
+        },
+        message: (props) => `${props.value} is not a valid URL!`,
+      },
+      required: [true, "Website URL is required"],
+    },
+    benefits: {
+      type: [String],
+      required: [true, "Benefits are required"],
+    },
     reviews: [reviewSchema],
-    rating: { type: Number, required: true, default: 0 },
-    numReviews: { type: Number, required: true, default: 0 },
-    price: { type: Number, required: true, default: 0 },
-    countInStock: { type: Number, required: true, default: 0 },
+    adminApproval: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
